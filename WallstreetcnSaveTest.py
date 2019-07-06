@@ -50,10 +50,10 @@ class MongoDBIO:
         db = connection[self.database]
         if self.name or self.password:
             db.authenticate(name=self.name, password=self.password) # 验证用户名密码
-        # print "Database:", db.name
+        # print"Database:", db.name
         # posts = db.cn_live_news
         posts = db[self.collection]
-        # print "Collection:", posts.name
+        # print"Collection:", posts.name
         return posts
 
 # 保存操作
@@ -71,10 +71,10 @@ def Spider(url, data):
     # # 方法2：urllib2 get
     # data = urllib.urlencode(data) # 编码工作，由dict转为string
     # full_url = url+'?'+data
-    # print full_url
+    # printfull_url
     # content = urllib2.urlopen(full_url).read() # GET请求发送
     # # content = requests.get(full_url).content # GET请求发送
-    # print type(content) # str
+    # printtype(content) # str
     return content
 
 def ContentSave(item):
@@ -91,7 +91,7 @@ def ContentSave(item):
     type = item[0]
     content = item[1].decode("unicode_escape") # json格式数据中，需从'\\uxxxx'形式的unicode_escape编码转换成u'\uxxxx'的unicode编码
     content = content.encode("utf-8")
-    # print content
+    # printcontent
     # district的筛选
     categorySet = item[2]
     category_num = categorySet.split(",")
@@ -122,13 +122,13 @@ def func(page):
     content = Spider(url, data)
     items = re.findall(r'"type":"(.*?)","codeType".*?"contentHtml":"(.*?)","data".*?"categorySet":"(.*?)","hasMore"', content) # 正则匹配
     if len(items) == 0:
-        print ("The End Page:"), page
+        print("The End Page:"), page
         data = urllib.urlencode(data) # 编码工作，由dict转为string
         full_url = url+'?'+data
-        print (full_url)
+        print(full_url)
         sys.exit(0) # 无错误退出
     else:
-        print ("The Page:", page, "Downloading...")
+        print("The Page:", page, "Downloading...")
         for item in items:
             ContentSave(item)
 
@@ -161,16 +161,16 @@ if __name__ == '__main__':
         content = Spider(url, data)
         items = re.findall(r'"type":"(.*?)","codeType".*?"contentHtml":"(.*?)","data".*?"categorySet":"(.*?)","hasMore"', content) # 正则匹配
         if len(items) == 0:
-            print ("The End Page:"), page
+            print("The End Page:"), page
             data = urllib.urlencode(data) # 编码工作，由dict转为string
             full_url = url+'?'+data
-            print (full_url)
+            print(full_url)
             break
         else:
-            print ("The Page:"), page, "Downloading..."
+            print("The Page:"), page, "Downloading..."
             for item in items:
                 ContentSave(item)
             page += 1
 
     end = datetime.datetime.now()
-    print ("last time: "), end-start
+    print("last time: "), end-start
